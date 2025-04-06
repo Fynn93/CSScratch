@@ -40,7 +40,7 @@ cd CSScratch
 Build the project:
 
 ```bash
-dotnet build
+dotnet build CSScratch
 ```
 
 Or use the precompiled binary from the [Releases](https://github.com/yourusername/csscratch/releases) page.
