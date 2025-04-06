@@ -109,15 +109,6 @@ Please check out the [Contributing Guide](CONTRIBUTING.md) before you start!
 
 ---
 
-## 🧪 Tests
-Run the test suite using:
-
-```bash
-dotnet test
-```
-
----
-
 ## 📄 License
 MIT License. See [LICENSE](LICENSE) for details.
 
