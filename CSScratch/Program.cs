@@ -20,8 +20,22 @@ Console.WriteLine($"Output directory: {outputDir}");
 if (!Directory.Exists(sourceDir))
     Directory.CreateDirectory(sourceDir);
 
-if (!Directory.Exists(outputDir))
+if (!Directory.Exists(outputDir) || Directory.GetFiles(outputDir).Length == 0)
+{
     Directory.CreateDirectory(outputDir);
+    var startInfo1 = new ProcessStartInfo
+    {
+        FileName = "goboscript",
+        Arguments = $"new --name {outputDir}",
+        UseShellExecute = false,
+        CreateNoWindow = true
+    };
+    var process1 = new Process
+    {
+        StartInfo = startInfo1,
+    };
+    process1.Start();
+}
 
 var references = FileUtility.GetCompilationReferences();
 foreach (var file in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.AllDirectories))
