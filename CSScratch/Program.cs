@@ -23,6 +23,7 @@ if (!Directory.Exists(sourceDir))
 if (!Directory.Exists(outputDir))
     Directory.CreateDirectory(outputDir);
 
+var references = FileUtility.GetCompilationReferences();
 foreach (var file in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.AllDirectories))
 {
     if (file.Contains("bin") || file.Contains("obj"))
@@ -31,7 +32,6 @@ foreach (var file in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.Al
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine($"Compiling {Path.GetFileNameWithoutExtension(file)}...");
     var source = File.ReadAllText(file);
-    var references = FileUtility.GetCompilationReferences();
     var sourceAst = CSharpSyntaxTree.ParseText(source);
     var compiler = CSharpCompilation.Create(
         "Compiled",
