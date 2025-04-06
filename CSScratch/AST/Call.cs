@@ -25,7 +25,6 @@ public sealed class Call : Expression
     private (string,bool) GetCalleeName()
     {
         var callee = Callee.ToString()!.Replace(".", "__");
-        Console.WriteLine(callee);
         callee = callee switch
         {
             "goto_xy" => "goto",
