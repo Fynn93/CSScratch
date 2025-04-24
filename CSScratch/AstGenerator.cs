@@ -55,9 +55,31 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
         );
     }
 
+    public Statement VisitStructFieldDeclaration(FieldDeclarationSyntax node)
+    {
+        List<Statement> statements = [];
+        statements.AddRange(
+            (
+                from declarator
+                    in node.Declaration.Variables
+                where declarator.Initializer == null
+                select new Variable(
+                    AstUtility.CreateIdentifierName(declarator),
+                    false,
+                    structEntry: true)
+                )
+            );
+
+        return new Block(statements);
+    }
+
     public override Statement VisitFieldDeclaration(FieldDeclarationSyntax node)
     {
-        if (!IsStatic(node) || node.Parent is not ClassDeclarationSyntax) return new NoOp();
+        if (node.Parent is StructDeclarationSyntax)
+            return VisitStructFieldDeclaration(node);
+
+        if (!IsStatic(node) || node.Parent is not ClassDeclarationSyntax)
+            return new NoOp();
 
         var classDeclaration = (ClassDeclarationSyntax)node.Parent!;
 
@@ -106,6 +128,13 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
     public override IdentifierName VisitThisExpression(ThisExpressionSyntax node)
     {
         return new IdentifierName(node.ToString());
+    }
+
+    public override Node? VisitStructDeclaration(StructDeclarationSyntax node)
+    {
+        var name = AstUtility.CreateIdentifierName(node);
+        var members = node.Members.Select(Visit<Statement>).ToList();
+        return new Struct(name, members);
     }
 
     public override Block VisitClassDeclaration(ClassDeclarationSyntax node)
@@ -496,6 +525,8 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
     {
         switch (GetName(node))
         {
+            case "ScratchNoWarp":
+                return new ScratchNoWarpAttribute();
             case "ScratchEvent":
             {
                 var type = ScratchEventType.None;

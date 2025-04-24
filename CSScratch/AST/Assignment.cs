@@ -2,8 +2,6 @@
 
 public sealed class Assignment : Expression
 {
-    public Expression Value;
-
     public Assignment(Expression name, Expression value)
     {
         Expression = name;
@@ -12,8 +10,17 @@ public sealed class Assignment : Expression
     }
 
     public Expression Expression { get; }
+    public Expression Value;
 
     public override void Compile(GbWriter writer)
+    {
+        CompileAssignment(writer);
+
+        if (Value.ToString()!.Contains('"')) // We have to check for empty string literals
+            Value = new Literal($"\"\\\"{Value.ToString()!.Replace("\"", "")}\\\"\"");   // And add extra quotes
+    }
+
+    private void CompileAssignment(GbWriter writer)
     {
         switch (Expression)
         {
@@ -27,10 +34,7 @@ public sealed class Assignment : Expression
                 Expression.Compile(writer);
                 break;
         }
-
         writer.Write(" = ");
-        if (Value.ToString()!.Contains('"')) // We have to check for empty string literals
-            Value = new Literal($"\"\\\"{Value.ToString()!.Replace("\"", "")}\\\"\"");   // And add extra quotes
         Value.Compile(writer);
         writer.WriteLine(";");
     }

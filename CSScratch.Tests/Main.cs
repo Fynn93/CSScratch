@@ -2,6 +2,8 @@
 
 using CSScratch.Library;
 using static CSScratch.Library.Scratch;
+using static CSScratch.Tests.Vector;
+
 
 #endregion
 
@@ -74,15 +76,30 @@ public class Main
         _x = 0;
     }*/
 
-    public static void TestMethod(dynamic name)
+    public static int Turns;
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Initialize)]
+    public static void Initialize()
     {
-        say("Hello ".Concat(name));
+        pen_up();
+        erase_all();
+        set_pen_hue(0);
+        set_pen_saturation(100);
+        set_pen_size(50);
     }
 
-
-    [ScratchEvent(ScratchEventType.Initialize)]
-    private static void Initialize()
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Tick)]
+    public static void Orbit()
     {
-        Text.Print("Hello World");
+        var x = 100 * sin(Turns);
+        var y = 100 * cos(Turns);
+        goto_xy(x + mouse_x(), y + mouse_y());
+        erase_all();
+        pen_down();
+        Turns++;
+        if (Turns > 360)
+        {
+            Turns = 0;
+        }
+        set_pen_hue(Turns);
     }
 }

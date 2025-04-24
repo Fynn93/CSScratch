@@ -16,7 +16,7 @@ public class QualifiedName : Name
 
     public override void Compile(GbWriter writer)
     {
-        throw new NotImplementedException();
+        writer.Write(ToString());
     }
 
     public override string ToString()

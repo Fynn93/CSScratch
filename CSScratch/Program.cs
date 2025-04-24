@@ -38,41 +38,11 @@ if (!Directory.Exists(outputDir) || Directory.GetFiles(outputDir).Length == 0)
 }
 
 var references = FileUtility.GetCompilationReferences();
-foreach (var file in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.AllDirectories))
-{
-    if (file.Contains("bin") || file.Contains("obj"))
-        continue;
+// Pass 1; Discover Structs and Functions
+DoPass(1);
 
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine($"Compiling {Path.GetFileNameWithoutExtension(file)}...");
-    var source = File.ReadAllText(file);
-    var sourceAst = CSharpSyntaxTree.ParseText(source);
-    var compiler = CSharpCompilation.Create(
-        "Compiled",
-        [sourceAst],
-        references
-    );
-
-    foreach (var diagnostic in compiler.GetDiagnostics().Where(diagnostic => diagnostic.Id != "CS5001"))
-        Logger.HandleDiagnostic(diagnostic, Path.GetFileNameWithoutExtension(file));
-
-    var generator = new AstGenerator(sourceAst, compiler);
-    Ast ast;
-    try
-    {
-        ast = generator.GetAst();
-    }
-    catch (Exception e)
-    {
-        Logger.Error($"Failed to generate AST for {file}: {e}");
-        continue;
-    }
-
-    var writer = new GbWriter();
-    var compiled = writer.Compile(ast);
-    var outputFile = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(file).ToLower() + ".gs");
-    File.WriteAllText(outputFile, compiled);
-}
+// Pass 2; Actually compile the code
+DoPass(2);
 
 Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("Compilation completed.");
@@ -107,3 +77,52 @@ else
     Console.Write(error);
 }
 Console.ResetColor();
+return;
+
+void DoPass(int passNum)
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"Pass {passNum}");
+    foreach (var file in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.AllDirectories))
+    {
+        if (file.Contains("bin") || file.Contains("obj"))
+            continue;
+
+        if (passNum == 2)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"Compiling {Path.GetFileNameWithoutExtension(file)}...");
+        }
+        var source = File.ReadAllText(file);
+        var sourceAst = CSharpSyntaxTree.ParseText(source);
+        var compiler = CSharpCompilation.Create(
+            "Compiled",
+            [sourceAst],
+            references
+        );
+
+        foreach (var diagnostic in compiler.GetDiagnostics().Where(diagnostic => diagnostic.Id != "CS5001"))
+            Logger.HandleDiagnostic(diagnostic, Path.GetFileNameWithoutExtension(file));
+
+        // Pass 2
+        var generator = new AstGenerator(sourceAst, compiler);
+        Ast ast;
+        try
+        {
+            ast = generator.GetAst();
+        }
+        catch (Exception e)
+        {
+            if (passNum == 2)
+                Logger.Error($"Failed to generate AST for {file}: {e}");
+            continue;
+        }
+
+        var writer = new GbWriter();
+        var compiled = writer.Compile(ast);
+        if (passNum == 1) continue;
+
+        var outputFile = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(file).ToLower() + ".gs");
+        File.WriteAllText(outputFile, compiled);
+    }
+}

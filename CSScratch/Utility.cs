@@ -103,27 +103,11 @@ public static partial class Utility
 
         return csharpType switch
         {
-            "object" => "any",
+            "object" => "",
             "void" or "null" => "void",
-            "char" or "Char" or "String" => "string",
-            "double" or "float" => "number",
-            "bool" => "boolean",
-            _ => IntegerTypes.Contains(csharpType) ? "number" : csharpType
-        };
-    }
-
-    public static string? GetBit32MethodName(string bitOp)
-    {
-        return bitOp switch
-        {
-            "&=" or "&" => "band",
-            "|=" or "|" => "bor",
-            "^=" or "^" => "bxor",
-            ">>=" or ">>" => "rshift",
-            ">>>=" or ">>>" => "arshift",
-            "<<=" or "<<" => "lshift",
-            "~" => "bnot",
-            _ => null
+            "char" or "Char" or "String" => "",
+            "bool" => "",
+            _ => IntegerTypes.Contains(csharpType) ? "" : csharpType
         };
     }
 

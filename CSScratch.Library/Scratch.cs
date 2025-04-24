@@ -27,7 +27,7 @@ public abstract class Scratch
         return null!;
     }
 
-    public static dynamic Abs(dynamic num)
+    public static dynamic abs(dynamic num)
     {
         return null!;
     }
@@ -251,11 +251,11 @@ public abstract class Scratch
     #endregion
     #region BLOCKS - Looks
 
-    public static void say_for_secs(dynamic message, dynamic secs)
+    public static void say(dynamic message, dynamic secs)
     {
     }
 
-    public static void think_for_secs(dynamic message, dynamic secs)
+    public static void think(dynamic message, dynamic secs)
     {
     }
 
@@ -482,44 +482,161 @@ public abstract class Scratch
     #endregion
     #region REPORTERS - Motion
 
-    public static dynamic? x_position;
-    public static dynamic? y_position;
-    public static dynamic? direction;
+    public static dynamic x_position()
+    {
+        return null!;
+    }
+
+    public static dynamic y_position()
+    {
+        return null!;
+    }
+
+    public static dynamic direction()
+    {
+        return null!;
+    }
 
     #endregion
     #region REPORTERS - Looks
 
-    public static dynamic? size;
-    public static dynamic? costume_number;
-    public static string?  costume_name;
-    public static dynamic? backdrop_number;
-    public static string?  backdrop_name;
+    public static dynamic size()
+    {
+        return null!;
+    }
+
+    public static dynamic costume_number()
+    {
+        return null!;
+    }
+
+    public static string costume_name()
+    {
+        return null!;
+    }
+
+    public static dynamic backdrop_number()
+    {
+        return null!;
+    }
+
+    public static string backdrop_name()
+    {
+        return null!;
+    }
 
     #endregion
     #region REPORTERS - Sensing
 
-    public static dynamic? distance_to_mouse_pointer;
-    public static dynamic? distance_to;
-    public static dynamic? touching_mouse_pointer;
-    public static dynamic? touching_edge;
-    public static dynamic? touching;
-    public static dynamic? key_pressed;
-    public static dynamic? mouse_down;
-    public static dynamic? mouse_x;
-    public static dynamic? mouse_y;
-    public static dynamic? loudness;
-    public static dynamic? timer;
-    public static dynamic? current_year;
-    public static dynamic? current_month;
-    public static dynamic? current_date;
-    public static string?  current_day_of_week;
-    public static dynamic? current_hour;
-    public static dynamic? current_minute;
-    public static dynamic? current_second;
-    public static dynamic? days_since_2000;
-    public static string?  username;
-    public static dynamic? touching_color;
-    public static dynamic? color_is_touching_color;
+    public static dynamic distance_to_mouse_pointer()
+    {
+        return null!;
+    }
+
+    public static dynamic distance_to()
+    {
+        return null!;
+    }
+
+    public static dynamic touching_mouse_pointer()
+    {
+        return null!;
+    }
+
+    public static dynamic touching_edge()
+    {
+        return null!;
+    }
+
+    public static dynamic touching()
+    {
+        return null!;
+    }
+
+    public static dynamic key_pressed()
+    {
+        return null!;
+    }
+
+    public static dynamic mouse_down()
+    {
+        return null!;
+    }
+
+    public static dynamic mouse_x()
+    {
+        return null!;
+    }
+
+    public static dynamic mouse_y()
+    {
+        return null!;
+    }
+
+    public static dynamic loudness()
+    {
+        return null!;
+    }
+
+    public static dynamic timer()
+    {
+        return null!;
+    }
+
+    public static dynamic current_year()
+    {
+        return null!;
+    }
+
+    public static dynamic current_month()
+    {
+        return null!;
+    }
+
+    public static dynamic current_date()
+    {
+        return null!;
+    }
+
+    public static string current_day_of_week()
+    {
+        return null!;
+    }
+
+    public static dynamic current_hour()
+    {
+        return null!;
+    }
+
+    public static dynamic current_minute()
+    {
+        return null!;
+    }
+
+    public static dynamic current_second()
+    {
+        return null!;
+    }
+
+    public static dynamic days_since_2000()
+    {
+        return null!;
+    }
+
+    public static string username()
+    {
+        return null!;
+    }
+
+    public static dynamic touching_color()
+    {
+        return null!;
+    }
+
+    public static dynamic color_is_touching_color()
+    {
+        return null!;
+    }
 
     #endregion
     #region REPORTERS - Operator

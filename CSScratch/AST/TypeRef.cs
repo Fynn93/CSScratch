@@ -9,10 +9,12 @@ public class TypeRef(string path, bool rawPath = false) : Expression
 
     public override void Compile(GbWriter writer)
     {
+        writer.Write(path);
+        writer.Write(" ");
     }
 
     public override string ToString()
     {
-        return "";
+        return path + " ";
     }
 }

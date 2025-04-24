@@ -46,6 +46,19 @@ public class Parameter : Statement
 
     public override string ToString()
     {
-        return Name.ToString();
+        var typeStr = Type?.ToString().Trim();
+        typeStr = typeStr switch
+        {
+            null => "",
+            "void" => "",
+            "int" => "",
+            "string" => "",
+            "bool" => "",
+            "float" => "",
+            "char" => "",
+            "dynamic" => "",
+            _ => typeStr
+        };
+        return (typeStr + " " + Name.Text).Trim();
     }
 }

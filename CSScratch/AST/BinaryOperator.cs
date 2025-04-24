@@ -17,9 +17,12 @@ public class BinaryOperator : Expression
     public override void Compile(GbWriter writer)
     {
         Left.Compile(writer);
+        if (writer.GetLastChar() == ';')
+            writer.RemoveLastSemicolon();
         writer.Write($" {Operator} ");
         Right.Compile(writer);
-        writer.WriteLine(";");
+        if (writer.GetLastChar() != ';')
+            writer.WriteLine(";");
     }
 
     public override string ToString()

@@ -10,7 +10,7 @@ namespace CSScratch;
 public class BaseWriter
 {
     public const int IndentSize = 4;
-    private readonly StringBuilder _output = new();
+    public readonly StringBuilder _output = new();
     private int _indent;
 
     public override string ToString()

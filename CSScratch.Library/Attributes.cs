@@ -15,3 +15,11 @@ public class ScratchEvent : Attribute
     {
     }
 }
+
+[AttributeUsage(AttributeTargets.Method)]
+public class ScratchNoWarp : Attribute
+{
+    public ScratchNoWarp()
+    {
+    }
+}

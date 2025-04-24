@@ -11,7 +11,7 @@ public class GbWriter : BaseWriter
         return ToString();
     }
 
-    public void WriteFunction(string name, string? returnType, List<Parameter> parameters, Block body, bool isPublic = false)
+    public void WriteFunction(string name, string? returnType, List<Parameter> parameters, Block body, bool isPublic = false, bool noWarp = false)
     {
         name = name.Replace(".", "__");
         var funcType = returnType == "void" ? "proc" : "func";
@@ -26,8 +26,10 @@ public class GbWriter : BaseWriter
             "char" => "",
             _ => returnType
         };
-        WriteLine($"{funcType} {name}{(funcType == "proc" ? " ": "(")}{string.Join(", ", parameters)}{(funcType == "proc" ? " " : ")")}{returnType}");
-        WriteLine("{");
+        if (returnType.Contains('.'))
+            returnType = returnType.Split('.').Last();
+        Write($"{(funcType == "proc" && noWarp ? "nowarp ": "")}");
+        WriteLine($"{funcType} {name}{(funcType == "proc" ? " ": "(")}{string.Join(", ", parameters)}{(funcType == "proc" ? " " : ")")} {returnType} {{");
         PushIndent();
 
         if (parameters.Count > 0)
@@ -55,19 +57,25 @@ public class GbWriter : BaseWriter
         if (!isPublic) return;
         WriteLine($"on \"{name}\" {{");
         PushIndent();
+        var iterator = 0;
         foreach (var parameter in parameters)
         {
-            WriteLine($"__{name}_p_{parameter.Name.Text}__ = Stack[length Stack];");
-            WriteLine("delete Stack[length Stack];");
+            var type = AstUtility.IsBaseType(parameter.Type!) ? "" : parameter.Type!.ToString().Trim();
+            WriteLine($"{type} __{name}_p_{parameter.Name.Text}__ = __{type}_arg_{iterator}__;");
+            iterator++;
         }
+        var customReturnType = AstUtility.IsBaseType(returnType) ? "" : returnType;
+        if (funcType != "proc")
+            Write($"__{customReturnType}_ret__ = ");
         Write(name);
-        Write(" ");
+        Write((funcType == "proc" ? " ": "("));
         foreach (var parameter in parameters)
         {
             Write($"__{name}_p_{parameter.Name.Text}__");
             if (parameter != parameters.Last())
                 Write(", ");
         }
+        Write((funcType == "proc" ? " " : ")"));
         WriteLine(";");
         PopIndent();
         WriteLine("}");
@@ -113,7 +121,38 @@ public class GbWriter : BaseWriter
         PushIndent();
         body.Compile(this);
         incrementBy?.Compile(this);
+        WriteLine(";");
         PopIndent();
         WriteLine("}");
+    }
+
+    /// Gets the last character of the output string and skips new lines and carriage returns
+    public char GetLastChar()
+    {
+        if (_output.Length == 0) return ' ';
+        for (var i = _output.Length - 1; i >= 0; i--)
+        {
+            if (_output[i] != '\n' && _output[i] != '\r' && _output[i] != ' ')
+                return _output[i];
+        }
+        return ' ';
+    }
+
+    public void RemoveLastSemicolon() => RemoveUpToLastCharacter(';');
+
+    public void RemoveUpToLastCharacter(char character)
+    {
+        // Removes the last semicolon from the output string
+        if (_output.Length == 0) return;
+        for (var i = _output.Length - 1; i >= 0; i--)
+        {
+            if (_output[i] != character)
+            {
+                RemoveLastCharacter();
+                continue;
+            }
+            RemoveLastCharacter();
+            break;
+        }
     }
 }

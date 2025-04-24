@@ -12,8 +12,11 @@ namespace CSScratch;
 
 public static partial class AstUtility
 {
-    /// <summary>File path -> dictionary(identifier name, amount of times identifier is used)</summary>
-    private static readonly Dictionary<string, Dictionary<string, uint>> IdentifierDeclarations = [];
+    /// <summary>Function name = Function AST</summary>
+    public static Dictionary<string, Function> Functions = [];
+    /// <summary>Struct name = Struct AST</summary>
+    public static Dictionary<string, Struct> Structs = [];
+    public static bool EnableTick = false;
 
     public static TableInitializer CreateTypeInfo(Type type)
     {
@@ -223,4 +226,22 @@ public static partial class AstUtility
 
     [GeneratedRegex(@"\{[a-zA-Z0-9]+\}")]
     private static partial Regex MyRegex();
+
+    public static bool IsBaseType(TypeRef parameterType) => IsBaseType(parameterType.Path);
+
+    public static bool IsBaseType(string? type)
+    {
+        return type switch
+        {
+            "int" => true,
+            "string" => true,
+            "bool" => true,
+            "float" => true,
+            "char" => true,
+            "void" => true,
+            "dynamic" => true,
+            null => true,
+            _ => false
+        };
+    }
 }

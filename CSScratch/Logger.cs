@@ -58,7 +58,7 @@ public static class Logger
 
     public static void HandleDiagnostic(Diagnostic diagnostic, string file)
     {
-        HashSet<string> ignoredCodes = ["CS7022", "CS0017", "CS0246", "CS1980", "CS0176", "CS0103"];
+        HashSet<string> ignoredCodes = ["CS7022", "CS0017", "CS0246", "CS1980", "CS0176", "CS0103", "CS0234"];
         if (ignoredCodes.Contains(diagnostic.Id)) return;
 
         var lineSpan = diagnostic.Location.GetLineSpan();
