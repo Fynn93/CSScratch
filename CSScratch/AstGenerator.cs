@@ -22,6 +22,7 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
     public override Ast VisitCompilationUnit(CompilationUnitSyntax node)
     {
         List<Statement> statements = [];
+        statements.AddRange(node.Usings.Select(Visit<Include>).OfType<Include>());
         foreach (var member in node.Members)
         {
             var statement = Visit<Statement?>(member);
@@ -31,6 +32,12 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
         }
 
         return new Ast(statements);
+    }
+
+    public override Include VisitUsingDirective(UsingDirectiveSyntax node)
+    {
+        var name = Visit<QualifiedName>(node.Name);
+        return node.StaticKeyword.IsKind(SyntaxKind.StaticKeyword) ? new Include(name) : null!;
     }
 
     public override Name VisitPredefinedType(PredefinedTypeSyntax node)
@@ -395,9 +402,11 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
     public override Name VisitIdentifierName(IdentifierNameSyntax node)
     {
         var classDeclaration = FindFirstAncestor<ClassDeclarationSyntax>(node);
+        if (classDeclaration is null)
+            return new IdentifierName(node.Identifier.Text);
+
         var className = AstUtility.CreateIdentifierName(classDeclaration!);
-        var isClassMember = classDeclaration != null
-                            && classDeclaration.Members.Any(member =>
+        var isClassMember = classDeclaration.Members.Any(member =>
                                 member is not ConstructorDeclarationSyntax && TryGetName(member) == GetName(node))
                             && (node.Parent is not MemberAccessExpressionSyntax memberAccess ||
                                 memberAccess.Expression is not ThisExpressionSyntax);

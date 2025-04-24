@@ -6,7 +6,6 @@ using static CSScratch.Library.Scratch;
 
 namespace CSScratch.Tests;
 
-///gs costumes "blank.svg" as "@ascii/";
 ///gs list FontData = file ```font.txt```;
 
 public class Text

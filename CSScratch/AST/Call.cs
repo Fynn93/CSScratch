@@ -57,41 +57,9 @@ public sealed class Call : Expression
             returnBody = calleeName.Item1.Split("__")[0] + " & " + ArgumentList.Arguments[0];
             return returnBody;
         }
-        if (calleeName.Item2)
-        {
-            var returnType = "";
-            if (AstUtility.Functions.TryGetValue(Callee.ToString()!.Replace(':', '.'), out var function2))
-            {
-                if (function2.ReturnType != null && function2.ReturnType.Path != "void")
-                {
-                    returnType = function2.ReturnType.ToString().Trim();
-                }
-            }
-
-            if (writer?.GetLastChar() == '=')
-                returnBody = string.IsNullOrEmpty(returnType) ? "0;\n" : Struct.GetStructInitializer(AstUtility.Structs[returnType]) + ";\n";
-
-            var counter = 0;
-            foreach (var argument in ArgumentList.Arguments)
-            {
-                if (function2 is null)
-                    continue;
-
-                var type = function2.ParameterList.Parameters[counter].Type!.Path;
-                var stackType = "";
-                if (!AstUtility.IsBaseType(type))
-                    stackType = type;
-
-                returnBody += $"__{stackType}_arg_{counter}__ = {argument};\n";
-                counter++;
-            }
-
-            returnBody += $"broadcast_and_wait \"{calleeName.Item1}\";";
-            return returnBody;
-        }
 
         var hasReturn = false;
-        if (AstUtility.Functions.TryGetValue(Callee.ToString()!, out var function))
+        if (AstUtility.Functions.TryGetValue(Callee.ToString()!.Replace(':', '.'), out var function))
         {
             if (function.ReturnType != null && function.ReturnType.Path != "void")
             {

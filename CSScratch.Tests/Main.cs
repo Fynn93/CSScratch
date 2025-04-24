@@ -4,7 +4,6 @@ using CSScratch.Library;
 using static CSScratch.Library.Scratch;
 using static CSScratch.Tests.Vector;
 
-
 #endregion
 
 namespace CSScratch.Tests;
@@ -76,7 +75,7 @@ public class Main
         _x = 0;
     }*/
 
-    public static int Turns;
+    /*public static int Turns;
     [ScratchNoWarp, ScratchEvent(ScratchEventType.Initialize)]
     public static void Initialize()
     {
@@ -90,6 +89,7 @@ public class Main
     [ScratchNoWarp, ScratchEvent(ScratchEventType.Tick)]
     public static void Orbit()
     {
+        Vector2 v = Vector.Create(0, 0);
         var x = 100 * sin(Turns);
         var y = 100 * cos(Turns);
         goto_xy(x + mouse_x(), y + mouse_y());
@@ -101,5 +101,5 @@ public class Main
             Turns = 0;
         }
         set_pen_hue(Turns);
-    }
+    }*/
 }

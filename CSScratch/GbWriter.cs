@@ -55,6 +55,8 @@ public class GbWriter : BaseWriter
         WriteLine("}");
 
         if (!isPublic) return;
+        //TODO
+        return;
         WriteLine($"on \"{name}\" {{");
         PushIndent();
         var iterator = 0;

@@ -94,8 +94,10 @@ void DoPass(int passNum)
         var writer = new GbWriter();
         foreach (var @struct in AstUtility.Structs)
         {
-            @struct.Value.Compile(writer);
+            @struct.Value.Compile(writer, true);
         }
+        writer.WriteLine("costumes \"blank.svg\";");
+
         var outputFile = Path.Combine(outputDir, "lib", "__common__.gs");
         if (!Directory.Exists(Path.Combine(outputDir, "lib")))
             Directory.CreateDirectory(Path.Combine(outputDir, "lib"));
@@ -143,7 +145,7 @@ void DoPass(int passNum)
         if (passNum == 1) continue;
 
         var sourceFileLocation = Path.GetFullPath(file).Replace(Path.GetFullPath(sourceDir) + "\\", "");
-        var outputFile = Path.Combine(outputDir, Path.GetDirectoryName(sourceFileLocation), Path.GetFileNameWithoutExtension(sourceFileLocation).ToLower() + ".gs");
+        var outputFile = Path.Combine(outputDir, Path.GetDirectoryName(sourceFileLocation)!, Path.GetFileNameWithoutExtension(sourceFileLocation).ToLower() + ".gs");
         File.WriteAllText(outputFile, compiled);
     }
 }

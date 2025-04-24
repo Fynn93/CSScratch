@@ -20,6 +20,13 @@ public class Struct : Statement
 
     public override void Compile(GbWriter writer)
     {
+        Compile(writer, false);
+    }
+
+    public void Compile(GbWriter writer, bool fromCommon)
+    {
+        if (!fromCommon) return;
+
         writer.Write("struct ");
         writer.Write(Name.ToString());
         writer.WriteLine(" {");

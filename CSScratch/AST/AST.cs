@@ -12,7 +12,6 @@ public class Ast : Node
 
     public override void Compile(GbWriter writer)
     {
-        writer.WriteLine("costumes \"blank.svg\";\n");
         writer.WriteLine("%include lib/__common__.gs");
         writer.WriteLine("# Compiled with CSScratch v" + GetType().Assembly.GetName().Version);
         foreach (var statement in Statements) statement.Compile(writer);
