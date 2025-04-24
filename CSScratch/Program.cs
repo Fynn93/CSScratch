@@ -81,6 +81,26 @@ return;
 
 void DoPass(int passNum)
 {
+    if (passNum == 2)
+    {
+        // Clear the output directory
+        foreach (var file in Directory.EnumerateFiles(outputDir, "*.gs", SearchOption.AllDirectories))
+        {
+            if (file.Contains("bin") || file.Contains("obj"))
+                continue;
+            File.Delete(file);
+        }
+        // Export structs to __common__.gs
+        var writer = new GbWriter();
+        foreach (var @struct in AstUtility.Structs)
+        {
+            @struct.Value.Compile(writer);
+        }
+        var outputFile = Path.Combine(outputDir, "lib", "__common__.gs");
+        if (!Directory.Exists(Path.Combine(outputDir, "lib")))
+            Directory.CreateDirectory(Path.Combine(outputDir, "lib"));
+        File.WriteAllText(outputFile, writer.ToString());
+    }
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine($"Pass {passNum}");
     foreach (var file in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.AllDirectories))
@@ -122,7 +142,8 @@ void DoPass(int passNum)
         var compiled = writer.Compile(ast);
         if (passNum == 1) continue;
 
-        var outputFile = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(file).ToLower() + ".gs");
+        var sourceFileLocation = Path.GetFullPath(file).Replace(Path.GetFullPath(sourceDir) + "\\", "");
+        var outputFile = Path.Combine(outputDir, Path.GetDirectoryName(sourceFileLocation), Path.GetFileNameWithoutExtension(sourceFileLocation).ToLower() + ".gs");
         File.WriteAllText(outputFile, compiled);
     }
 }

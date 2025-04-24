@@ -96,7 +96,7 @@ public class Main
         erase_all();
         pen_down();
         Turns++;
-        if (Turns > 360)
+        if (Turns > 359)
         {
             Turns = 0;
         }
