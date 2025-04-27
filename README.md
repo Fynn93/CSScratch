@@ -19,13 +19,6 @@
 Before using CSScratch, make sure you have the following installed:
 
 - [.NET 9.0 SDK or later](https://dotnet.microsoft.com/download)
-- [`goboscript`](https://github.com/aspizu/goboscript) CLI in your system `PATH`
-
-You can verify that `goboscript` is accessible by running:
-
-```bash
-goboscript --version
-```
 
 ---
 
@@ -87,7 +80,7 @@ onflag
 - Functions with parameters
 - Events
 - Basic math and string operations
-- Calling methods from other sprites (`public static` )
+- Structs
 
 > 📌 Not all C# features are supported. CSScratch is focused on the intersection of C# and what GoboScript/Scratch can express.
 
