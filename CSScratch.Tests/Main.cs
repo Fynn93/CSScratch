@@ -2,7 +2,8 @@
 
 using CSScratch.Library;
 using static CSScratch.Library.Scratch;
-using static CSScratch.Tests.Vector;
+using static CSScratch.Tests.Stage;
+using static CSScratch.Tests.Library.Vector;
 
 #endregion
 
@@ -102,4 +103,45 @@ public class Main
         }
         set_pen_hue(Turns);
     }*/
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Key, "d")]
+    public static void Right()
+    {
+        Position.X += 10;
+    }
+
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Key, "a")]
+    public static void Left()
+    {
+        Position.X -= 10;
+    }
+
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Key, "w")]
+    public static void Up()
+    {
+        Position.Y += 10;
+    }
+
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Key, "s")]
+    public static void Down()
+    {
+        Position.Y -= 10;
+    }
+
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Tick)]
+    public static void Update()
+    {
+        goto_xy(Position.X, Position.Y);
+        pen_up();
+        erase_all();
+        pen_down();
+    }
+    [ScratchNoWarp, ScratchEvent(ScratchEventType.Initialize)]
+    public static void Initialize()
+    {
+        pen_up();
+        erase_all();
+        set_pen_hue(0);
+        set_pen_saturation(100);
+        set_pen_size(50);
+    }
 }

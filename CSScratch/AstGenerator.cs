@@ -96,13 +96,15 @@ public sealed class AstGenerator(SyntaxTree tree, CSharpCompilation compiler) : 
             if (declarator.Initializer == null) continue;
 
             var initializer = Visit<Expression>(declarator.Initializer);
+            var type = Visit<IdentifierName>(node.Declaration.Type);
             statements.Add(new ExpressionStatement(
                 new Assignment(
                     new MemberAccess(
                         AstUtility.CreateIdentifierName(classDeclaration),
                         AstUtility.CreateIdentifierName(declarator)
                     ),
-                    initializer
+                    initializer,
+                    type
                 )
             ));
         }

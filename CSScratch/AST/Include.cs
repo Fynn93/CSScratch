@@ -7,9 +7,10 @@ public class Include(Name name) : Statement
     public override void Compile(GbWriter writer)
     {
         var realName = Name.ToString().Split('.').Last().ToLower();
-        if (realName == "scratch")
+        if (realName is "scratch" or "stage")
             return;
 
-        writer.WriteLine($"%include lib/{realName}.gs");
+        var library = Name.ToString().Contains("Library");
+        writer.WriteLine($"%include {(library ? "Library/" : "")}{realName}.gs");
     }
 }

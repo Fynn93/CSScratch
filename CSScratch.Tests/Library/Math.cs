@@ -1,4 +1,4 @@
-namespace CSScratch.Tests;
+namespace CSScratch.Tests.Library;
 
 public class Math
 {

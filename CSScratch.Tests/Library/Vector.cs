@@ -2,7 +2,7 @@ using static CSScratch.Library.Scratch;
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable SuggestVarOrType_SimpleTypes
 
-namespace CSScratch.Tests;
+namespace CSScratch.Tests.Library;
 
 public class Vector
 {

@@ -146,6 +146,10 @@ void DoPass(int passNum)
 
         var sourceFileLocation = Path.GetFullPath(file).Replace(Path.GetFullPath(sourceDir) + "\\", "");
         var outputFile = Path.Combine(outputDir, Path.GetDirectoryName(sourceFileLocation)!, Path.GetFileNameWithoutExtension(sourceFileLocation).ToLower() + ".gs");
+
+        if (!Directory.Exists(Path.GetDirectoryName(outputFile)))
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
+
         File.WriteAllText(outputFile, compiled);
     }
 }

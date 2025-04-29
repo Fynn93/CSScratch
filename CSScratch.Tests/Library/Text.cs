@@ -4,7 +4,7 @@ using static CSScratch.Library.Scratch;
 
 #endregion
 
-namespace CSScratch.Tests;
+namespace CSScratch.Tests.Library;
 
 ///gs list FontData = file ```font.txt```;
 
